@@ -193,6 +193,15 @@ section.block{padding-block:clamp(80px,11vw,150px);position:relative}
 .poster .play{position:relative;width:46px;height:46px;border-radius:50%;background:var(--red);display:grid;place-items:center;margin-bottom:8px;transition:transform .3s}
 .poster .play svg{width:16px;height:16px;margin-left:3px;fill:var(--paper)}
 .card:hover .play{transform:scale(1.12)}
+.poster img.thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity .6s ease, transform .8s cubic-bezier(.2,.7,.2,1)}
+.poster.loaded img.thumb{opacity:1}
+.card:hover .poster img.thumb{transform:scale(1.05)}
+.poster .shade{position:absolute;inset:0;z-index:0;opacity:0;background:linear-gradient(180deg,rgba(15,13,14,.55) 0%,rgba(15,13,14,0) 40%,rgba(15,13,14,.65) 100%);transition:opacity .6s}
+.poster.loaded .shade{opacity:1}
+.poster.loaded .big{display:none}
+.poster.loaded .cat{color:#fff}
+.poster .cat,.poster .play{z-index:1}
+.poster::before,.poster::after{z-index:1}
 .poster.v-red{background:var(--red)}
 .poster.v-red .play{background:var(--ink)}
 .poster.v-paper{background:var(--mist);color:var(--ink)}
@@ -509,7 +518,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
           <div class="sec-label mono"><span class="dot"></span>00:00:36:00 · Selected work</div>
           <h2 class="sec-title reveal">Recent <em>work</em></h2>
         </div>
-        <p class="sec-note">AI films, drama scenes, UGC ads and edits. Each card plays the full video.</p>
+        <p class="sec-note">Twelve pieces picked from my recent work: AI films, AI drama, UGC ads and edits. Each card plays the full video.</p>
       </div>
       <div class="tabs" role="tablist" aria-label="Filter work" id="tabs"></div>
       <div class="grid" id="grid" role="tabpanel"></div>
@@ -665,83 +674,60 @@ var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").mat
 
 /* ---------------- WORK DATA ---------------- */
 var CATS=[
- {id:"featured",label:"Featured"},
- {id:"films",label:"AI Films"},
- {id:"drama",label:"AI Drama"},
+ {id:"all",label:"All work"},
+ {id:"films",label:"AI Films & Drama"},
  {id:"ugc",label:"UGC & Ads"},
- {id:"edits",label:"Edits & Reels"},
+ {id:"edits",label:"Edits & Motion"},
  {id:"youtube",label:"YouTube"}
 ];
+/* the 12 strongest pieces, one clear name each */
 var W=[
- {c:"films",t:"Dragon Oath: Movie Trailer",m:"AI film trailer",id:"1sta-a1AclO-WtkaBW2TfFYT21Nv-Hn-o",f:1,v:"",big:true},
- {c:"films",t:"Avery: Cinematic Horse Scene",m:"AI film scene",id:"1IzrGLeSiSiJIhzqmrPNO61NCZhBM1kOM",f:1,v:"v-red"},
- {c:"drama",t:"AI Drama Series",m:"6 episodes · AI drama scenes",series:[
+ {c:"films",t:"Dragon Oath: Movie Trailer",m:"AI film trailer",id:"1sta-a1AclO-WtkaBW2TfFYT21Nv-Hn-o",big:true},
+ {c:"films",t:"AI Drama Series",m:"6-part AI drama",id:"1knO2AYLGDunsS8Tv_4taLe_vUcwoNkK_",v:"v-paper",series:[
    ["Part 1","1knO2AYLGDunsS8Tv_4taLe_vUcwoNkK_"],["Part 2","1e1zQGvQaIWTNDp8BdVMkpX2OveWsv_em"],["Part 3","1HuLsbLfvGc-LAn8qtfaJcbiPY-qa-Eg-"],
-   ["Part 4","1Ren0gmSn35WiFdCC0q_SJvVwLtSM-C3k"],["Part 5","1OP7h-uZgmrqqxlV2wVdev-1mikX3IB_n"],["Part 6","1c9ZHEGAsn649Uf_eRhgY67Peis4WurmA"]],
-   id:"1knO2AYLGDunsS8Tv_4taLe_vUcwoNkK_",f:1,v:"v-paper",big:true},
- {c:"ugc",t:"Aussie Apparel: Full AI Ad",m:"UGC ad · fashion",id:"1Ly8q93YzhNgHHtO9QWnbBOYgg21WUNrT",f:1,v:"v-red"},
- {c:"ugc",t:"Aussie Apparel: Couple Blue & Red",m:"UGC ad · fashion",id:"1z7bSlJNjKAIC7uJIAzauhzeJ3fzB2p0j"},
- {c:"ugc",t:"Aussie Apparel: Factory Hoodies",m:"UGC ad · fashion",id:"1h6xDuUC9VAPqPRK2xT0GXnabr_qke_lK",v:"v-paper"},
- {c:"ugc",t:"Aussie Apparel: Kangaroo Hoodie",m:"UGC ad · fashion",id:"1H6FaCBE3fgD5bU_FcbijfqPfQ1Fr3G00",f:1},
- {c:"ugc",t:"Aussie Apparel: Smiling Model",m:"UGC ad · fashion",id:"1qSD9ZXo85g_eq9kEEANH7YFdm_u0PmkF",v:"v-red"},
- {c:"ugc",t:"Aussie Apparel: Black Hoodie",m:"UGC ad · fashion",id:"1qDon5Feh_yAMQeQofQTLEpec8maFMVRE"},
- {c:"ugc",t:"Aussie Apparel: Couple",m:"UGC ad · fashion",id:"17nxQpxccyNNaTKTM9psY83-9pxXi0EbN",v:"v-paper"},
- {c:"ugc",t:"Corporate Promo: Office Portrait",m:"Corporate promo",id:"12RXXPa-yHCg_rJmCLPhqAoX98JC2nt-h",f:1,v:"v-paper"},
- {c:"ugc",t:"Corporate Promo: Office Tablet",m:"Corporate promo",id:"1Y_vHfx46n5xPFwWszrYi4Iinn-Q0zP9u"},
- {c:"ugc",t:"Real Estate Listing Video",m:"Property ad",id:"1UV6wm9qMcmsU8Bfg6SNRszxHL8oT_loM",f:1,v:"v-red"},
- {c:"ugc",t:"Interior Design Demo",m:"Product demo",id:"13n0OA1-86YSyrEAUWdqWcgw2VN2FVQKD"},
- {c:"ugc",t:"Massage Chair Preview",m:"Product ad",id:"1R5oR0CABGnp8-3onlNpY7Sgj-dqdYLtf",v:"v-paper"},
- {c:"ugc",t:"Clinic Promo: Preview",m:"Healthcare promo",id:"1oxz0STzmXTAHp2-L4P8nxYpoP2IPABay",v:"v-red"},
- {c:"ugc",t:"Clinic Promo: Preview 2",m:"Healthcare promo",id:"1UZRD1KgRjyD3SLSSdpOu9MiL8mzIZLGr"},
- {c:"ugc",t:"“Let Me Help” Service Promo",m:"Self promo",id:"11PYEJqno4GEalbdwzm1V_olwi_BZg1S2",v:"v-paper"},
- {c:"edits",t:"Reel 1",m:"Short-form edit",id:"1vOmgPvoy-ThqSt6rHGGB-kRX06GY1zZP",f:1},
- {c:"edits",t:"Reel 2",m:"Short-form edit",id:"1PlanveGNZO5nEBray-8doEEH7t8X2ly1",v:"v-red"},
- {c:"edits",t:"Reel 2.0",m:"Short-form edit",id:"1NaSh-K4VwA9Frl8F-VeZaxHo3RIJbnrn",v:"v-paper"},
- {c:"edits",t:"TikTok Video 1",m:"TikTok edit",id:"1RsganhIfx8uLhNjhRKQ5l6bR4NJ7cyyj"},
- {c:"edits",t:"TikTok Video 2",m:"TikTok edit",id:"1csc1gMVMotxB-SNV709nLvmmRzZGEBVg",v:"v-red"},
- {c:"edits",t:"Speaker Video: Kinetic Typography",m:"Motion graphics",id:"1zVyH1cYL0wl0AYcQcXAxpcv5ibfaP6UU",f:1,v:"v-paper"},
- {c:"edits",t:"Edit 01",m:"Video sample",id:"1-TjlonAdllMYev7IaEaebVVf3pAQQMU6"},
- {c:"edits",t:"Edit 02",m:"Video sample",id:"1KFM3Z5I8ByUzKFmWnpPq76ZTiSjOHFia",v:"v-red"},
- {c:"edits",t:"Edit 03",m:"Video sample",id:"1wNcl3uxz8Ti_qpx6KasJX-_T9u16ff8d",v:"v-paper"},
- {c:"edits",t:"Edit 03 (alt)",m:"Video sample",id:"1k1Halhyy9m-ypLto-lcpb187KCQl3NZB"},
- {c:"edits",t:"Edit 04",m:"Video sample",id:"1I3oK9ek3LXPoet4GxiUbX2ANmM3aAo5n",v:"v-red"},
- {c:"edits",t:"Edit 0810",m:"Video sample",id:"1sKiDGPQFPjEn3atq3i8zD22caOxxR_R-",v:"v-paper"},
- {c:"edits",t:"Edit 0818",m:"Video sample",id:"1tB3QEAAZC0t7avPoHQB0O-aL73mqMqBY"},
- {c:"edits",t:"Edit 0827",m:"Video sample",id:"1bVjjrHxHCDSHLir-NqIHshRFka-_FC0e",v:"v-red"},
- {c:"edits",t:"Edit 0830",m:"Video sample",id:"1mF4OofJzUzLuYrwbgClKZjnc-QEoWnDD",v:"v-paper"},
- {c:"edits",t:"Preview 1",m:"Video sample",id:"1d93OAj93seulS4igGKwoHg2WkBi0bGCN"},
- {c:"youtube",t:"Boneca Ambalabu",m:"AI horror short · YouTube",url:"https://www.youtube.com/shorts/tOQj57OorDk",f:1,v:"v-paper"},
- {c:"youtube",t:"UFO Documentary",m:"AI documentary · YouTube",url:"https://youtu.be/4SEXzcEsTgs",v:"v-red"}
+   ["Part 4","1Ren0gmSn35WiFdCC0q_SJvVwLtSM-C3k"],["Part 5","1OP7h-uZgmrqqxlV2wVdev-1mikX3IB_n"],["Part 6","1c9ZHEGAsn649Uf_eRhgY67Peis4WurmA"]]},
+ {c:"films",t:"Avery: Cinematic Horse Scene",m:"AI film scene",id:"1IzrGLeSiSiJIhzqmrPNO61NCZhBM1kOM",v:"v-red"},
+ {c:"ugc",t:"Aussie Apparel: AI Fashion Ad",m:"UGC ad · full campaign cut",id:"1Ly8q93YzhNgHHtO9QWnbBOYgg21WUNrT",v:"v-red"},
+ {c:"ugc",t:"Aussie Apparel: Kangaroo Hoodie",m:"UGC ad · product spot",id:"1H6FaCBE3fgD5bU_FcbijfqPfQ1Fr3G00"},
+ {c:"ugc",t:"Corporate Promo: Office",m:"Corporate promo",id:"12RXXPa-yHCg_rJmCLPhqAoX98JC2nt-h",v:"v-paper"},
+ {c:"ugc",t:"Real Estate Listing Video",m:"Property ad",id:"1UV6wm9qMcmsU8Bfg6SNRszxHL8oT_loM",v:"v-red"},
+ {c:"ugc",t:"Interior Design Showcase",m:"Product demo",id:"13n0OA1-86YSyrEAUWdqWcgw2VN2FVQKD"},
+ {c:"edits",t:"Kinetic Typography: Speaker Video",m:"Motion graphics",id:"1zVyH1cYL0wl0AYcQcXAxpcv5ibfaP6UU",v:"v-paper"},
+ {c:"edits",t:"Short-Form Reel Edit",m:"Reel · captions & pacing",id:"1vOmgPvoy-ThqSt6rHGGB-kRX06GY1zZP",v:"v-red"},
+ {c:"youtube",t:"Boneca Ambalabu",m:"AI horror short",url:"https://www.youtube.com/shorts/tOQj57OorDk",yt:"tOQj57OorDk"},
+ {c:"youtube",t:"UFO Documentary",m:"AI documentary",url:"https://youtu.be/4SEXzcEsTgs",yt:"4SEXzcEsTgs",v:"v-paper"}
 ];
 var catLabel={};CATS.forEach(function(c){catLabel[c.id]=c.label;});
 var playSvg='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.8v12.4L13.5 8z"/></svg>';
 var docSvg='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1h6l3 3v11H4z"/></svg>';
 function esc(s){return String(s).replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[ch];});}
-function card(w,i,feat){
+function thumb(w){return w.yt?"https://i.ytimg.com/vi/"+w.yt+"/hqdefault.jpg":(w.id?"https://drive.google.com/thumbnail?id="+w.id+"&sz=w800":"");}
+function card(w,i){
   var href=w.url||D(w.id);
   var n=String(i+1).padStart(2,"0");
-  var big=(feat&&w.big)?" feature":"";
+  var big=w.big?" feature":"";
   var ep="";
   if(w.series){ep='<div class="episodes">'+w.series.map(function(s){return '<a href="'+D(s[1])+'" target="_blank" rel="noopener">'+s[0]+'</a>';}).join("")+'</div>';}
-  var where=w.url?"YouTube":(w.doc?"Google Drive · PDF":"Google Drive");
+  var where=w.url?"YouTube":"Google Drive";
+  var th=thumb(w);
+  var img=th?'<img class="thumb" src="'+th+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.parentNode.classList.add(\'loaded\')" onerror="this.remove()">':'';
   var inner='<a href="'+href+'" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:flex;flex-direction:column;flex:1">'+
-    '<div class="poster '+(w.v||"")+'"><span class="cat">'+esc(catLabel[w.c])+' · '+n+'</span><span class="play">'+(w.doc?docSvg:playSvg)+'</span><span class="big" aria-hidden="true">'+n+'</span></div>'+
+    '<div class="poster '+(w.v||"")+'">'+img+'<span class="shade" aria-hidden="true"></span><span class="cat">'+esc(catLabel[w.c])+' · '+n+'</span><span class="play">'+playSvg+'</span><span class="big" aria-hidden="true">'+n+'</span></div>'+
     '<div class="card-body"><h3>'+esc(w.t)+'</h3><span>'+esc(w.m)+' · '+where+' ↗</span></div></a>';
   return '<div class="card'+big+'">'+inner+ep+'</div>';
 }
 var tabs=document.getElementById("tabs"),grid=document.getElementById("grid");
-function count(id){return id==="featured"?W.filter(function(w){return w.f;}).length:W.filter(function(w){return w.c===id;}).length;}
-tabs.innerHTML=CATS.map(function(c,i){return '<button class="tab" role="tab" id="tab-'+c.id+'" aria-selected="'+(i===0)+'" data-c="'+c.id+'" type="button">'+c.label+' <small>'+count(c.id)+'</small></button>';}).join("");
+function list(id){return id==="all"?W:W.filter(function(w){return w.c===id;});}
+tabs.innerHTML=CATS.map(function(c,i){return '<button class="tab" role="tab" id="tab-'+c.id+'" aria-selected="'+(i===0)+'" data-c="'+c.id+'" type="button">'+c.label+' <small>'+list(c.id).length+'</small></button>';}).join("");
 function show(id){
-  var list=id==="featured"?W.filter(function(w){return w.f;}):W.filter(function(w){return w.c===id;});
-  grid.innerHTML=list.map(function(w,i){return card(w,i,true);}).join("");
+  grid.innerHTML=list(id).map(function(w,i){return card(w,i);}).join("");
   grid.setAttribute("aria-labelledby","tab-"+id);
   Array.prototype.forEach.call(tabs.children,function(b){b.setAttribute("aria-selected",String(b.dataset.c===id));});
   if(window.gsap&&!reduce){gsap.fromTo(grid.children,{y:16,opacity:0},{y:0,opacity:1,duration:.6,stagger:.03,ease:"expo.out",overwrite:true,clearProps:"transform"});}
-  try{localStorage.setItem("amkg-tab",id);}catch(e){}
+  try{localStorage.setItem("amkg-tab2",id);}catch(e){}
 }
 tabs.addEventListener("click",function(e){var b=e.target.closest(".tab");if(b)show(b.dataset.c);});
-var startTab="featured";try{var s=localStorage.getItem("amkg-tab");if(s&&CATS.some(function(c){return c.id===s;}))startTab=s;}catch(e){}
+var startTab="all";try{var s=localStorage.getItem("amkg-tab2");if(s&&CATS.some(function(c){return c.id===s;}))startTab=s;}catch(e){}
 show(startTab);
 
 /* ---------------- copy helpers ---------------- */
